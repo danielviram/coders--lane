@@ -24,7 +24,7 @@ const usersController = {
     if (!interest) return res.status(404).send({ message: 'Language was not found!' });
 
     user = new User(
-      _.pick(req.body, ["firstName", "lastName", "username", "password", "interest"])
+      _.pick(req.body, ["firstName", "lastName", "username", "email", "password", "interest"])
     );
 
     const salt = await bcrypt.genSalt(10);
