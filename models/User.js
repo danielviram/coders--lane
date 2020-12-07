@@ -10,9 +10,7 @@ const userSchema = new mongoose.Schema({
   lastName: { type: String, min: 3, max: 50, required: true },
   username: { type: String, min: 3, max: 50, unique: true, required: true },
   password: { type: String, min: 6, max: 1024, required: true },
-  interests: [
-    { type: mongoose.Schema.Types.ObjectId, ref: "Interest", required: true },
-  ],
+  interest: { type: mongoose.Schema.Types.ObjectId, ref: "Interest", required: true }
 });
 
 userSchema.methods.generateAuthToken = function () {
@@ -62,7 +60,9 @@ const userValidator = (user) => {
       "string.alphanum": "Username must only contain alpha-numeric characters.",
     }),
     password: passwordComplexity.default(passwordComplexityOptions),
-    interests: Joi.array().items({ interest: Joi.objectId().required() }),
+    interest: Joi.objectId().required().messages({
+      "any.required": "Interest is required."
+    }),
   }).options({ abortEarly: false });
 
   return schema.validate(user, joiObjOptions);

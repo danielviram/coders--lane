@@ -20,8 +20,11 @@ const usersController = {
     let user = await User.findOne({ username: req.body.username });
     if (user) return res.status(400).send({ message: "Username is taken!" });
 
+    const interest = await Interest.findById(req.body.interest);
+    if (!interest) return res.status(404).send({ message: 'Language was not found!' });
+
     user = new User(
-      _.pick(req.body, ["firstName", "lastName", "username", "password"])
+      _.pick(req.body, ["firstName", "lastName", "username", "password", "interest"])
     );
 
     const salt = await bcrypt.genSalt(10);
@@ -29,7 +32,7 @@ const usersController = {
 
     user = await user.save();
 
-    user = await User.findById(user._id).select("-__v -password");
+    user = await User.findById(user._id).populate('interest', '-__v').select("-__v -password");
 
     const token = user.generateAuthToken();
 
@@ -40,47 +43,19 @@ const usersController = {
 
     res.send(resObj);
   },
-  updateUserInterests: async (req, res) => {
-    let user = await User.findById(req.params.id).select("-__v -password");
-    if (!user) return res.status(404).send({ message: "User does not exist." });
+  getSameInterestUsers: async (req, res) => {
+    const currentUser = await User.findById(req.body.userId);
+    if (!currentUser) return res.status(404).send({ message: "User was not found." })
 
-    const newInterestsArray = await Promise.all(
-      req.body.interests.map(async (interest) => {
-        try {
-          let interestItem = await Interest.findById(interest);
-          if (!interestItem)
-            return res.status(404).send({ message: "Interest was not found." });
-          return interestItem;
-        } catch {
-          return res.status(404).send({ message: "Interest was not found." });
-        }
-      })
-    );
+    const allUsers = await User.find().populate('interest', '-__v').select('-__v -password');
 
-    user.interests = newInterestsArray;
-    user = await user.save();
+    const sameInterestUsers = allUsers.filter(user => !user._id.equals(currentUser._id));
 
-    res.send(user);
-  },
-  removeUserInterest: async (req, res) => {
-    let user = await User.findById(req.params.id)
-      .populate("interests", "-__v")
-      .select("-__v -password");
-    if (!user) return res.status(404).send({ message: "User does not exist." });
+    const newSameInterestUsers = sameInterestUsers.filter(user => user.interest.equals(currentUser.interest));
+    console.log(newSameInterestUsers);
 
-    const sentInterest = await Interest.findById(req.body.interest);
-    if (!sentInterest)
-      return res.status(404).send({ message: "Interest was not found." });
-
-    const newInterestsArray = user.interests.filter(
-      (interest) => !sentInterest._id.equals(interest._id)
-    );
-
-    user.interests = newInterestsArray;
-    user = await user.save();
-
-    res.send(user);
-  },
+    res.send(newSameInterestUsers)
+  }
 };
 
 module.exports = usersController;
