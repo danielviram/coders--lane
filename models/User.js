@@ -11,7 +11,7 @@ const userSchema = new mongoose.Schema({
   username: { type: String, min: 3, max: 50, unique: true, required: true },
   email: { type: String, min: 1, max: 50, required: true, unique: true },
   password: { type: String, min: 6, max: 1024, required: true },
-  interest: { type: mongoose.Schema.Types.ObjectId, ref: "Interest", required: true }
+  interest: { type: mongoose.Schema.Types.ObjectId, ref: "Interest", required: false }
 });
 
 userSchema.methods.generateAuthToken = function () {
@@ -68,9 +68,9 @@ const userValidator = (user) => {
       "string.email": "Email must be a valid email.",
     }),
     password: passwordComplexity.default(passwordComplexityOptions),
-    interest: Joi.objectId().required().messages({
-      "any.required": "Interest is required."
-    }),
+    // interest: Joi.objectId().required().messages({
+    //   "any.required": "Interest is required."
+    // }),
   }).options({ abortEarly: false });
 
   return schema.validate(user, joiObjOptions);
