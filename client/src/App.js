@@ -11,7 +11,7 @@ function App() {
       {/* Header */}
       <Header />
       {/* JoinCards */}
-      <joinCards />
+      <JoinCards />
       {/* Swipe buttons */}
       <SwipeButtons />
     </div>
