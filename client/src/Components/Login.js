@@ -16,11 +16,11 @@ export default function Login() {
     e.preventDefault();
     try {
       const loginUser = { username, password };
-            const renamedLogin = {username: username, password: password}
+      const renamedLogin = {username: username.toLowerCase(), password: password}
 
 
       const loginRes = await Axios.post(
-        "http://localhost:5000/api/v1/auth/login",
+        "/api/v1/auth/login",
         renamedLogin
       );
 
