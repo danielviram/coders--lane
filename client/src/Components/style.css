@@ -9,7 +9,7 @@
 }
 
 a {
-  color: #2199df;
+  color: #239ce2;
   text-decoration: unset;
 }
 
@@ -52,22 +52,22 @@ body {
 
 .container {
   margin: 0 auto;
-  max-width: 900px;
+  max-width: 850px;
 }
 
 /* header */
 
 #header {
-  height: 50px;
+  height: 55px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #e02525;
+  background-color: #e93c3c;
 }
 #header .title {
   margin: 0;
   padding: 0 1rem;
-  color: #ffffff;
+  color: white;
 }
 #header .auth-options {
   height: 100%;
@@ -75,12 +75,12 @@ body {
 }
 #header .auth-options button {
   padding: 0 1rem;
-  background-color: #b91b1b;
-  color: #ffffff;
+  background-color: #be1c1c;
+  color: white;
   font-size: 1.1rem;
 }
 #header .auth-options button:hover {
-  background-color: #be3a3a;
+  background-color: #c53e3e;
 }
 
 /* form */
@@ -100,21 +100,21 @@ body {
 .form input[type="password"] {
   width: 100%;
   padding: 0.3rem;
-  border: 1px solid #c2c2c2;
+  border: 1px solid lightgray;
   border-radius: 8px;
-  background-color: #f0f0f0;
+  background-color: #ffffff;
   font-size: 1.1rem;
 }
 .form input:focus {
-  border: 1px solid #50a4e9;
-  box-shadow: inset 0px 0px 5px rgba(38, 142, 228, 0.5);
+  border: 1px solid #4da0e4;
+  box-shadow: inset 0px 0px 5px rgba(39, 141, 224, 0.5);
   outline: none;
 }
 .form input[type="submit"] {
   padding: 0.3rem 0.5rem;
-  border: 1px solid #6aa051;
+  border: 1px solid #6da354;
   border-radius: 8px;
-  background-color: #c8ecb7;
+  background-color: #c8eeb7;
   font-size: 1.1rem;
 }
 
@@ -134,19 +134,19 @@ body {
 .error-notice {
   margin: 1rem 0;
   padding: 0.5rem;
-  border: 1px solid #e07c7c;
-  border-radius: 8px;
+  border: 1px solid #d87575;
+  border-radius: 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #f8d6d6;
+  background-color: #f7d8d8;
 }
 .error-notice button {
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background-color: #df4343;
-  color: #ffffff;
+  background-color: #e74747;
+  color: white;
 }
 
 /* media queries */
