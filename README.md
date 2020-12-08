@@ -21,7 +21,8 @@ The new technology that we used involves Material-UI and Express Validator
 * [Daniel Viramontes ](https://github.com/danielviram)
 * [Sam Fullerton ](https://github.com/samfullerton)
 * [Steve Kavuu ](https://github.com/sck916)
-License: MIT License 
+
+## License: MIT License 
 Copyright (c) 2020 Ben Resnicoff, Maxence Jeanty, Daniel Viramontes, Sam Fullerton, Steve Kavuu   
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
