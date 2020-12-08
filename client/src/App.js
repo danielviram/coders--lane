@@ -7,6 +7,7 @@ import Home from "./Components/Home";
 import Login from "./Components/Login";
 import Register from "./Components/Register";
 import UserContext from "./Components/UserContext";
+import Landing from "./Components/Landing";
 
 export default function App() {
   const [userData, setUserData] = useState({
@@ -47,9 +48,10 @@ export default function App() {
           {/* <Header /> */}
           <div className="container">
             <Switch>
-              <Route path="/login" component={Login} />
-              <Route path="/register" component={Register} />
-              <Route path='/home' component={Home} />
+              <Route exact path="/" component={Landing} />
+              <Route exact path="/login" component={Login} />
+              <Route exact path="/register" component={Register} />
+              <Route exact path='/home' component={Home} />
             </Switch>
           </div>
         </UserContext.Provider>
