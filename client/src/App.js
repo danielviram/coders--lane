@@ -47,9 +47,9 @@ export default function App() {
           {/* <Header /> */}
           <div className="container">
             <Switch>
-            <Route exact path="/" component={Home} />
               <Route path="/login" component={Login} />
               <Route path="/register" component={Register} />
+              <Route path='/home' component={Home} />
             </Switch>
           </div>
         </UserContext.Provider>

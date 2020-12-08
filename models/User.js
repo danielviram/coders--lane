@@ -68,9 +68,9 @@ const userValidator = (user) => {
       "string.email": "Email must be a valid email.",
     }),
     password: passwordComplexity.default(passwordComplexityOptions),
-    // interest: Joi.objectId().required().messages({
-    //   "any.required": "Interest is required."
-    // }),
+    interest: Joi.objectId().required().messages({
+      "any.required": "Interest is required."
+    }),
   }).options({ abortEarly: false });
 
   return schema.validate(user, joiObjOptions);

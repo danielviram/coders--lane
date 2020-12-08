@@ -5,7 +5,7 @@ import Axios from "axios";
 import ErrorNotice from "./ErrorNotice";
 
 export default function Login() {
-  const [email, setEmail] = useState();
+  const [username, setUsername] = useState();
   const [password, setPassword] = useState();
   const [error, setError] = useState();
 
@@ -15,9 +15,8 @@ export default function Login() {
   const submit = async (e) => {
     e.preventDefault();
     try {
-      const loginUser = { email, password };
-      console.log('emailll', email)
-            const renamedLogin = {username: email, password: password}
+      const loginUser = { username, password };
+            const renamedLogin = {username: username, password: password}
 
 
       const loginRes = await Axios.post(
@@ -29,8 +28,9 @@ export default function Login() {
         token: loginRes.data.token,
         user: loginRes.data.user,
       });
-      localStorage.setItem("auth-token", loginRes.data.token);
-      history.push("/");
+      localStorage.setItem("token", loginRes.data.token);
+      localStorage.setItem('userId', loginRes.data.user._id);
+      history.push("/home");
     } catch (err) {
       err.response.data.msg && setError(err.response.data.msg);
     }
@@ -42,17 +42,19 @@ export default function Login() {
         <ErrorNotice message={error} clearError={() => setError(undefined)} />
       )}
       <form className="form" onSubmit={submit}>
-        <label htmlFor="login-email">Email</label>
+        <label htmlFor="login-email">Username</label>
         <input
           id="login-email"
           // type="email"
-          onChange={(e) => setEmail(e.target.value)}
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
         />
 
         <label htmlFor="login-password">Password</label>
         <input
           id="login-password"
           type="password"
+          value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
 

@@ -4,7 +4,7 @@ const { Interest, interestValidator } = require("../models/Interest");
 const interestController = {
   getInterests: async (req, res) => {
     //GET All Interest
-    const interests = await Interest.find(); // Have it await to get all the Interest
+    const interests = await Interest.find().select('-__v'); // Have it await to get all the Interest
     res.send(interests);
   },
   createInterest: async (req, res) => {
