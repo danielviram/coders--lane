@@ -1,9 +1,10 @@
 //connention to mongodb
 const mongoose = require("mongoose");
+require('dotenv').config()
 
 const db = () => {
   mongoose
-    .connect("mongodb://localhost/coders-lane", {
+    .connect(process.env.DB_URL, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       useFindAndModify: false,
