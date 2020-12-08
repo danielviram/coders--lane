@@ -1,82 +1,95 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
+import Select from 'react-select';
 import { useHistory } from "react-router-dom";
 import UserContext from "./UserContext";
-import Axios from "axios";
 import ErrorNotice from "./ErrorNotice";
 
 export default function Register() {
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
-  const [passwordCheck, setPasswordCheck] = useState();
-  const [displayName, setDisplayName] = useState();
-  const [error, setError] = useState();
+  const [interests, setInterests] = useState([]);
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [interest, setInterest] = useState('');
+
+  const [errors, setErrors] = useState([]);
 
   const { setUserData } = useContext(UserContext);
   const history = useHistory();
 
+  useEffect(() => {
+    fetch('/api/v1/interests')
+    .then(resp => resp.json())
+    .then(interests => {
+      const interestsDropdownArray = interests.map(interest => {
+        let interestDropdown = new Object();
+        interestDropdown.value = interest._id;
+        interestDropdown.label = interest.name;
+        return interestDropdown;
+      })
+
+      setInterests(interestsDropdownArray)
+    })
+  }, [])
+
   const submit = async (e) => {
     e.preventDefault();
 
-    try {
-      const newUser = { email, password, passwordCheck, displayName };
-
-      const renamedUser = {
-        firstName: displayName,
-        lastName: 'McCarthy',
-        username: displayName,
-        email: email,
-        password: password,
-        // interest: 'code is my fave iteresttttt'
-      }
-      console.log('newUser abut to reigest', newUser)
-      await Axios.post("http://localhost:5000/api/v1/users/register", renamedUser);
-      const loginRes = await Axios.post("http://localhost:5000/api/v1/users/login", {
-        email,
-        password,
-      });
-      setUserData({
-        token: loginRes.data.token,
-        user: loginRes.data.user,
-      });
-      localStorage.setItem("auth-token", loginRes.data.token);
-      history.push("/");
-    } catch (err) {
-      err.response.data.msg && setError(err.response.data.msg);
+    const userRegister = {
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      username: username,
+      password: password,
+      interest: interest.value
     }
+
+    const reqObj = {
+      method: 'POST',
+      headers: {
+        'Content-Type': "application/json",
+        "Accepts": "application/json"
+      },
+      body: JSON.stringify(userRegister)
+    }
+
+    fetch('/api/v1/users/register', reqObj)
+    .then(resp => {
+      if (resp.status === 400) {
+        return resp.json().then(errors => setErrors(errors))
+      }
+      return resp.json();
+    })
+    .then(user => {
+      if (!user) return;
+      localStorage.setItem('token', user.token);
+      localStorage.setItem('userId', user.user._id);
+      history.push('/home');
+    })
   };
 
   return (
     <div className="page">
       <h2>Register</h2>
-      {error && (
-        <ErrorNotice message={error} clearError={() => setError(undefined)} />
-      )}
+      {errors.map(error => <p>{error}</p>)}
       <form className="form" onSubmit={submit}>
+        <label htmlFor="register-firstName">First Name</label>
+        <input id="register-firstName" type='name' value={firstName} onChange={(e) => setFirstName(e.target.value)} />
+
+        <label htmlFor="register-lastName">Last Name</label>
+        <input id="register-lastName" type='name' value={lastName} onChange={(e) => setLastName(e.target.value)} />
+
         <label htmlFor="register-email">Email</label>
-        <input
-          id="register-email"
-          type="email"
-          onChange={(e) => setEmail(e.target.value)}
-        />
+        <input id="register-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+
+        <label htmlFor="register-username">Username</label>
+        <input id="register-username" type="name" value={username} onChange={(e) => setUsername(e.target.value)} />
 
         <label htmlFor="register-password">Password</label>
-        <input
-          id="register-password"
-          type="password"
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <input
-          type="password"
-          placeholder="Verify password"
-          onChange={(e) => setPasswordCheck(e.target.value)}
-        />
+        <input id="register-password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
 
-        <label htmlFor="register-display-name">Display name</label>
-        <input
-          id="register-display-name"
-          type="text"
-          onChange={(e) => setDisplayName(e.target.value)}
-        />
+        <Select options={interests} value={interest} onChange={(e) => setInterest(e)} />
 
         <input type="submit" value="Register" />
       </form>
