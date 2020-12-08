@@ -40,7 +40,7 @@ export default function Register() {
       firstName: firstName,
       lastName: lastName,
       email: email,
-      username: username,
+      username: username.toLowerCase(),
       password: password,
       interest: interest.value
     }
